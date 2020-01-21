@@ -11,6 +11,7 @@ class App extends Component {
       isLoaded: false,
       data: null,
       headers: null,
+      sort: null,
     };
   }
 
@@ -22,19 +23,33 @@ class App extends Component {
         return response.json();
       })
       .then((data) => {
+        var sort = {};
+        for (var head of Object.keys(data[0])) {
+          sort[head] = 0;
+        }
         this.setState({
           isLoaded: true,
           data: data,
           headers: Object.keys(data[0]),
+          sort: sort,
         });
       });
   }
 
   onSort(event, key) {
     const data = this.state.data;
-    data.sort((a, b) => a[key].localeCompare(b[key]));
+    const sort = this.state.sort;
+    sort[key] === 0 ? (
+      data.sort((a, b) => a[key].localeCompare(b[key])),
+      sort[key] = -1
+    ) : (
+      data.sort((a, b) => b[key].localeCompare(a[key])),
+      sort[key] = 0
+    );
+
     this.setState({
       data: data,
+      sort: sort,
     })
   }
 
