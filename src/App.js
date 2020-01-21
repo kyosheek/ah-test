@@ -5,11 +5,13 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.onSort = this.onSort.bind(this);
+
     this.state = {
       isLoaded: false,
       data: null,
       headers: null,
-    }
+    };
   }
 
   componentDidMount() {
@@ -28,9 +30,17 @@ class App extends Component {
       });
   }
 
+  onSort(event, key) {
+    const data = this.state.data;
+    data.sort((a, b) => a[key].localeCompare(b[key]));
+    this.setState({
+      data: data,
+    })
+  }
+
   renderTableHeader() {
     return this.state.headers.map((head, index) => {
-        return <td key={index}>{head}</td>
+        return <td key={index} onClick={e => this.onSort(e, head)}>{head}</td>
       }
     );
   }
