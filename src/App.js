@@ -15,30 +15,48 @@ class App extends Component {
     };
   }
 
+  setState2(state) {
+    sessionStorage.setItem('state', JSON.stringify(state));
+    this.setState(state);
+  }
+
+  getState2() {
+    var state = sessionStorage.getItem('state') || 1;
+    return {
+      state: JSON.parse(state),
+    }
+  }
+
   componentDidMount() {
-    fetch('https://raw.githubusercontent.com/blmzv/ah-frontend-intern/master/profiles.json', {
-      method: 'get',
-    })
-      .then(response => {
-        return response.json();
+    var state = this.getState2();
+    state['state'] !== 1 ? (
+      this.setState(state['state'])
+    ) : (
+      fetch('https://raw.githubusercontent.com/blmzv/ah-frontend-intern/master/profiles.json', {
+        method: 'get',
       })
-      .then((data) => {
-        var sort = {};
-        for (var head of Object.keys(data[0])) {
-          sort[head] = 0;
-        }
-        this.setState({
-          isLoaded: true,
-          data: data,
-          headers: Object.keys(data[0]),
-          sort: sort,
-        });
-      });
+        .then(response => {
+          return response.json();
+        })
+        .then((data) => {
+          var sort = {};
+          for (var head of Object.keys(data[0])) {
+            sort[head] = 0;
+          }
+          this.setState2({
+            isLoaded: true,
+            data: data,
+            headers: Object.keys(data[0]),
+            sort: sort,
+          });
+        })
+    )
   }
 
   onSort(event, key) {
     const data = this.state.data;
     const sort = this.state.sort;
+
     sort[key] === 0 ? (
       data.sort((a, b) => a[key].localeCompare(b[key])),
       sort[key] = -1
@@ -47,10 +65,14 @@ class App extends Component {
       sort[key] = 0
     );
 
-    this.setState({
+    this.setState2({
+      isLoaded: true,
       data: data,
+      headers: this.state.headers.slice(),
       sort: sort,
-    })
+    });
+
+    console.log(this.state);
   }
 
   renderTableHeader() {
@@ -80,16 +102,16 @@ class App extends Component {
     const { isLoaded } = this.state;
     return (
       isLoaded ?
-      <div id="dTable">
-        <table id="table">
-          <tbody>
-            <tr id="tableHead" key={-1}>{this.renderTableHeader()}</tr>
-            {this.renderTableData()}
-          </tbody>
-        </table>
-      </div>
+        <div id="dTable">
+          <table id="table">
+            <tbody>
+              <tr id="tableHead" key={-1}>{this.renderTableHeader()}</tr>
+              {this.renderTableData()}
+            </tbody>
+          </table>
+        </div>
       :
-      <p id="awaitText">Data is loading</p>
+        <p id="awaitText">Data is loading</p>
     )
   }
 }
