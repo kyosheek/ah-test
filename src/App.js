@@ -29,36 +29,36 @@ class App extends Component {
   }
 
   renderTableHeader() {
-
+    return this.state.headers.map((head, index) => {
+        return <td key={index}>{head}</td>
+      }
+    );
   }
 
   renderEntry(entry, index) {
     var row = Array(entry.length).fill(null);
     var pos = 0;
     for (var key in entry) {
-      row[pos] = <td>{entry[key]}</td>;
+      row[pos] = <td key={pos}>{entry[key]}</td>;
       pos += 1;
     }
     return row;
   }
 
   renderTableData() {
-    const data = this.state.data;
-    var entries = Array(data.length).fill(null);
-    this.state.data.map((entry, index) => {
-      entries[index] = <tr key={index}>{this.renderEntry(entry, index)}</tr>;
+    return this.state.data.map((entry, index) => {
+      return <tr key={index}>{this.renderEntry(entry, index)}</tr>;
     });
-    return entries;
   }
 
   render() {
-    const { isLoaded, data } = this.state;
+    const { isLoaded } = this.state;
     return (
       isLoaded ?
       <div id="dTable">
         <table id="table">
           <tbody>
-            <tr>{this.renderTableHeader()}</tr>
+            <tr id="tableHead" key={-1}>{this.renderTableHeader()}</tr>
             {this.renderTableData()}
           </tbody>
         </table>
@@ -70,7 +70,3 @@ class App extends Component {
 }
 
 export default App;
-
-function loadData() {
-
-}
