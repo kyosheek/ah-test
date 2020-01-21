@@ -29,6 +29,14 @@ td {
   background-color: #d0d0d0;
 }
 
+#tableHead > td:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 tbody > tr:nth-child(even) {
   background-color: #eee;
+}
+
+tbody > tr:hover {
+  background-color: rgba(255, 88, 120, 0.2);
 }
