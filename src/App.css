@@ -11,7 +11,7 @@
   border-collapse: collapse;
 }
 
-#table, tbody, tr, td {
+#table, tbody, tr, td, th {
   text-align: left;
   border: 2px solid black;
 }
@@ -20,7 +20,6 @@ td {
   font-size: 22px;
 
   padding: 5px;
-
 }
 
 #tableHead {

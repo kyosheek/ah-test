@@ -66,9 +66,8 @@ class App extends Component {
     );
 
     this.setState2({
-      isLoaded: true,
+      ...this.state,
       data: data,
-      headers: this.state.headers.slice(),
       sort: sort,
     });
 
@@ -77,7 +76,7 @@ class App extends Component {
 
   renderTableHeader() {
     return this.state.headers.map((head, index) => {
-        return <td key={index} onClick={e => this.onSort(e, head)}>{head}</td>
+        return <th key={index} onClick={e => this.onSort(e, head)}>{head}</th>
       }
     );
   }
